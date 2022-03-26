@@ -17,6 +17,8 @@ namespace ChristGame
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
             _inputMovement = new Vector2(0f, 0f);
+
+            //Time.timeScale = 0.1f;
         }
 
         private void FixedUpdate()

@@ -6,6 +6,8 @@ namespace ChristGame
 {
     public class Enemy : MonoBehaviour
     {
+        public bool isAlive;
+
         [SerializeField]
         private float _speed = 1f;
 
@@ -23,18 +25,20 @@ namespace ChristGame
             _collider2D = GetComponent<Collider2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _originPosition = transform.position;
+            isAlive = true;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             _directionToHero = PlayerGlobal.PlayerPosition - (Vector2)transform.position;
-            transform.Translate(_directionToHero * _speed * Time.fixedDeltaTime);
+            transform.Translate(_directionToHero * _speed * Time.deltaTime);
         }
 
         public void Damage()
         {
             _collider2D.enabled = false;
             _spriteRenderer.enabled = false;
+            isAlive = false;
             StartCoroutine(Ressurect());
         }
 
@@ -44,6 +48,7 @@ namespace ChristGame
             _collider2D.enabled = true;
             _spriteRenderer.enabled = true;
             transform.position = _originPosition;
+            isAlive = true;
         }
     }
 }

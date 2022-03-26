@@ -14,10 +14,6 @@ namespace ChristGame
         private float _bulletSpeed = 7f;
 
         [Header("Настройки радиуса атаки")]
-//        [SerializeField]
-//        private float _targetRadiusMax = 2f;
- //       [SerializeField]
-//        private float _targetRadiusMedium = 1f;
         [SerializeField]
         private float _targetRadiusStart = 0.8f;
         [SerializeField]
@@ -90,7 +86,6 @@ namespace ChristGame
             _targetDistance = Mathf.Infinity;
             for (int i = 0; i < _targetsCount; i++)
             {
-                /*float currentDistance = _playerCollider.Distance(_targetsColliders[i]).distance;*/
                 float currentDistance = Vector2.Distance(_playerCollider.transform.position,
                     _targetsColliders[i].transform.position);
                 if (currentDistance <= _targetDistance)
