@@ -27,6 +27,8 @@ namespace ChristGame
             {
                 _nextPosition = (Vector2)transform.position + ((_inputMovement) * _movementSpeed * Time.fixedDeltaTime);
                 _rigidbody2D.MovePosition(_nextPosition);
+
+                PlayerGlobal.PlayerPosition = transform.position;
             }
         }
 

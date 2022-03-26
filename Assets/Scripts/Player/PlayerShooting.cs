@@ -6,7 +6,14 @@ namespace ChristGame
 {
     public class PlayerShooting : MonoBehaviour
     {
-        [Header("Сканируем с самого маленького до самого большого круга.")]
+        public Transform bulletPool;
+
+        [SerializeField]
+        private GameObject _bulletPrefab;
+        [SerializeField]
+        private float _bulletSpeed = 7f;
+
+        [Header("Настройки радиуса атаки")]
 //        [SerializeField]
 //        private float _targetRadiusMax = 2f;
  //       [SerializeField]
@@ -21,6 +28,8 @@ namespace ChristGame
         private float _targetDistance = Mathf.Infinity;
         [SerializeField]
         private int _targetsCount;
+
+        private int _radiusTier;
 
         [SerializeField]
         private float _targetSearchTick = 2f;
@@ -57,19 +66,24 @@ namespace ChristGame
             {
                 yield return new WaitForSeconds(_targetSearchTick);
                 AcquireTarget();
+                Shoot();
             }
         }
 
         private void AcquireTarget()
         {
             float radius = _targetRadiusStart;
+            _radiusTier = -1;
             for (int i = 0; i < 3; ++i)
             {
                 _targetsCount = Physics2D.OverlapCircle(transform.position,
                     radius + _radiusIncrement * i, _contactFilter2D, _targetsColliders);
 
                 if (_targetsCount > 0)
+                {
+                    _radiusTier = i + 1;
                     break;
+                }
             }
 
             int targetIndex = -1;
@@ -90,19 +104,45 @@ namespace ChristGame
                 _targetCollider = _targetsColliders[targetIndex];
         }
 
+        private void Shoot()
+        {
+            Bullet bulletInstance = Instantiate(_bulletPrefab, bulletPool).GetComponent<Bullet>();
+            bulletInstance.transform.position = transform.position;
+            
+            // It is better to have direction, because of auto-targeting bullets
+            //bulletInstance.transform.up;
+
+            bulletInstance.Direction = _targetCollider.transform.position - transform.position;
+            bulletInstance.Speed = _bulletSpeed;
+        }
+
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, _targetRadiusStart);
+            if (_radiusTier != -1)
+            {
+                if (_radiusTier == 1)
+                    Gizmos.color = Color.green;
+                else
+                    Gizmos.color = Color.gray;
 
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, _targetRadiusStart + _radiusIncrement);
+                Gizmos.DrawWireSphere(transform.position, _targetRadiusStart);
 
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(transform.position, _targetRadiusStart + _radiusIncrement * 2);
+                if (_radiusTier == 2)
+                    Gizmos.color = Color.yellow;
+                else
+                    Gizmos.color = Color.gray;
+
+                Gizmos.DrawWireSphere(transform.position, _targetRadiusStart + _radiusIncrement);
+
+                if (_radiusTier == 3)
+                    Gizmos.color = Color.cyan;
+                else
+                    Gizmos.color = Color.gray;
+
+                Gizmos.DrawWireSphere(transform.position, _targetRadiusStart + _radiusIncrement * 2);
+            }
 
             Gizmos.color = Color.black;
-
             for (int i = 0; i < _targetsCount; i++)
             {
                 if (_targetsColliders[i])
