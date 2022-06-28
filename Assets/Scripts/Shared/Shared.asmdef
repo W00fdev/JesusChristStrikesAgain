@@ -1,3 +1,16 @@
 {
-	"name": "Shared"
+    "name": "Shared",
+    "rootNamespace": "Christ.Shared",
+    "references": [
+        "GUID:ba312fc4315990a44be53b864135a321"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

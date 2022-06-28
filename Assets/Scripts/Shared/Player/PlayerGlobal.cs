@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ChristGame
+namespace Christ.Shared
 {
     public static class PlayerGlobal
     {

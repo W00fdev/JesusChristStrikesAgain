@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ChristGame
+using Christ.Core;
+
+namespace Christ.Shared
 {
     public class Bullet : MonoBehaviour
     {
@@ -83,9 +85,9 @@ namespace ChristGame
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.TryGetComponent(out Enemy enemy))
+            if (other.TryGetComponent(out EnemyHealthable enemy))
             {
-                enemy.Damage();
+                enemy.Damage(enemy.MaxHp / 3f);
             }
 
             isAlive = false;
@@ -113,9 +115,9 @@ namespace ChristGame
 
             if (_hit2D)
             {
-                if (_hit2D.transform.TryGetComponent(out Enemy enemy))
+                if (_hit2D.transform.TryGetComponent(out EnemyHealthable enemy))
                 {
-                    enemy.Damage();
+                    enemy.Damage(enemy.MaxHp / 3f);
                 }
 
                 isAlive = false;

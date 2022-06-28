@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ChristGame
+namespace Christ.Shared
 {
     public class Enemy : MonoBehaviour
     {
@@ -17,10 +17,12 @@ namespace ChristGame
         [SerializeField]
         private float _ressurectTime = 1f;
 
+        //private EnemyHealthable 
+
         private Collider2D _collider2D;
         private SpriteRenderer _spriteRenderer;
 
-        private void Start()
+        private void Awake()
         {
             _collider2D = GetComponent<Collider2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -30,25 +32,27 @@ namespace ChristGame
 
         private void Update()
         {
-            _directionToHero = PlayerGlobal.PlayerPosition - (Vector2)transform.position;
-            transform.Translate(_directionToHero * _speed * Time.deltaTime);
+            if (isAlive)
+            {
+                _directionToHero = PlayerGlobal.PlayerPosition - (Vector2)transform.position;
+                transform.Translate(_directionToHero * _speed * Time.deltaTime);
+            }
         }
 
-        public void Damage()
+        private void DeathBehaviour()
         {
             _collider2D.enabled = false;
             _spriteRenderer.enabled = false;
             isAlive = false;
-            StartCoroutine(Ressurect());
         }
 
-        private IEnumerator Ressurect()
+        public void RessurectBehavour()
         {
-            yield return new WaitForSeconds(_ressurectTime);
             _collider2D.enabled = true;
             _spriteRenderer.enabled = true;
             transform.position = _originPosition;
             isAlive = true;
         }
+
     }
 }

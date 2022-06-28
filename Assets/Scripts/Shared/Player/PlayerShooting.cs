@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ChristGame
+namespace Christ.Shared
 {
     public class PlayerShooting : MonoBehaviour
     {
@@ -101,6 +101,9 @@ namespace ChristGame
 
         private void Shoot()
         {
+            if (_targetCollider == null)
+                return;
+
             Bullet bulletInstance = Instantiate(_bulletPrefab, bulletPool).GetComponent<Bullet>();
             bulletInstance.transform.position = transform.position;
             

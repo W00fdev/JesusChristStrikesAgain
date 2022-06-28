@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ChristGame
+namespace Christ.Shared
 {
     public class PlayerMovement : MonoBehaviour
     {
@@ -15,7 +15,6 @@ namespace ChristGame
 
         private void Start()
         {
-            _rigidbody2D = GetComponent<Rigidbody2D>();
             _inputMovement = new Vector2(0f, 0f);
 
             //Time.timeScale = 0.1f;
@@ -27,10 +26,12 @@ namespace ChristGame
             
             if (_inputMovement != Vector2.zero)
             {
-                _nextPosition = (Vector2)transform.position + ((_inputMovement) * _movementSpeed * Time.fixedDeltaTime);
+                _nextPosition = (Vector2)transform.position + (_inputMovement * _movementSpeed * Time.fixedDeltaTime);
                 _rigidbody2D.MovePosition(_nextPosition);
+                // transform.GetChild(0).GetComponent<Rigidbody2D>().MovePosition(_nextPosition); // Mode defense circel
 
                 PlayerGlobal.PlayerPosition = transform.position;
+
             }
         }
 
@@ -41,6 +42,11 @@ namespace ChristGame
             _inputMovement = Vector2.ClampMagnitude(_inputMovement, 1f);
 
             return _inputMovement;
+        }
+
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            Debug.Log("Collided with " + collision.name);
         }
 
     }
